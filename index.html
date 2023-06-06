@@ -36,7 +36,7 @@
     <video id="video" autoplay></video>
     <canvas id="canvas"></canvas>
     <img id="photo" alt="Photo" />
-    <img id="glass-frame" src="path_to_glass_frame_image.png" alt="Glass Frame" />
+    <img id="glass-frame" src="path_to_glass_frame_image.png" alt="Glass Frame"  width="50%"/>
 
     <button id="capture-btn">Capture Photo</button>
   </div>
@@ -67,7 +67,7 @@
       const photoDataUrl = canvas.toDataURL('image/png');
       photo.src = photoDataUrl;
 
-      await faceapi.loadSsdMobilenetv1Model('https://cdn.jsdelivr.net/npm/face-api.js/models');
+      await faceapi.loadSsdMobilenetv1Model('https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.js');
       await faceapi.loadFaceLandmarkModel('https://cdn.jsdelivr.net/npm/face-api.js/models');
 
       const detections = await faceapi.detectSingleFace(photo).withFaceLandmarks();
