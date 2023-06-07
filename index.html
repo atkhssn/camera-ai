@@ -1,103 +1,41 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Camera Application</title>
-  <style>
-    .content{
-      width: 50%;
-      margin: 0 auto;
-      text-align: center;
-    }
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer Vision AI Model</title>
 
-    #video {
-      width: 100%;
-      height: auto;
-    }
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            outline: 0;
+        }
 
-    #canvas {
-      display: none;
-    }
+        .app{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-    #photo {
-      display: none;
-    }
+        h1{
+            margin: 20px 0;
+            text-align: center;
+        }
 
-    #glass-frame {
-      position: absolute;
-      pointer-events: none;
-    }
-  </style>
+        canvas{
+            position: absolute;
+        }
+    </style>
 
 </head>
 <body>
-
-  <div class="content">
-    <h1>Camera Application</h1>
-    <video id="video" autoplay></video>
-    <canvas id="canvas"></canvas>
-    <img id="photo" alt="Photo" />
-    <img id="glass-frame" src="path_to_glass_frame_image.png" alt="Glass Frame"  width="50%"/>
-
-    <button id="capture-btn">Capture Photo</button>
-  </div>
-
-  <!-- <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script> -->
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.6.0/dist/tf.min.js"></script>
-  
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection"></script>
-  <script src="https://cdn.jsdelivr.net/npm/face-api.js"></script>
-  <script>
-    const video = document.getElementById('video');
-    const canvas = document.getElementById('canvas');
-    const photo = document.getElementById('photo');
-    const glassFrame = document.getElementById('glass-frame');
-
-    navigator.mediaDevices.getUserMedia({ video: true })
-      .then(stream => {
-        video.srcObject = stream;
-      })
-      .catch(error => console.error('Error accessing webcam:', error));
-
-    document.getElementById('capture-btn').addEventListener('click', capturePhoto);
-
-    async function capturePhoto() {
-      const context = canvas.getContext('2d');
-      context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-      const photoDataUrl = canvas.toDataURL('image/png');
-      photo.src = photoDataUrl;
-
-      await faceapi.loadSsdMobilenetv1Model('https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.js');
-      await faceapi.loadFaceLandmarkModel('https://cdn.jsdelivr.net/npm/face-api.js/models');
-
-      const detections = await faceapi.detectSingleFace(photo).withFaceLandmarks();
-      if (detections) {
-        const leftEye = detections.landmarks.getLeftEye();
-        const rightEye = detections.landmarks.getRightEye();
-
-        const leftEyeCenter = getLandmarkCenter(leftEye);
-        const rightEyeCenter = getLandmarkCenter(rightEye);
-
-        const glassesWidth = rightEyeCenter.x - leftEyeCenter.x;
-        const glassesHeight = glassesWidth * (glassFrame.height / glassFrame.width);
-
-        const glassesX = leftEyeCenter.x - glassesWidth * 0.15;
-        const glassesY = leftEyeCenter.y - glassesHeight * 0.4;
-
-        const context = canvas.getContext('2d');
-        context.drawImage(photo, 0, 0);
-        context.drawImage(glassFrame, glassesX, glassesY, glassesWidth * 1.3, glassesHeight);
-        photo.src = canvas.toDataURL('image/png');
-      }
-
-      photo.style.display = 'block';
-    }
-
-    function getLandmarkCenter(landmark) {
-      const x = landmark.reduce((sum, point) => sum + point.x, 0) / landmark.length;
-      const y = landmark.reduce((sum, point) => sum + point.y, 0) / landmark.length;
-      return { x, y };
-    }
-  </script>
+    <h1>Computer Vision AI Model</h1>
+    <div class="app">
+        <video id="video" width="720" height="568" muted autoplay></video>
+    </div>
+    <script defer src="./face-api.min.js"></script>
+    <script defer src="./camera-app.js"></script>
 </body>
 </html>
